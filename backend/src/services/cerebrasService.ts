@@ -128,6 +128,23 @@ export class CerebrasService {
         
         Return only valid JSON.
       `;
+
+      const requestBody = {
+        model: "gpt-oss-120b-chat",
+        messages: [
+          {
+            role: "system",
+            content: "You are a hiring manager comparing resumes to job requirements. Return valid JSON."
+          },
+          {
+            role: "user",
+            content: prompt
+          }
+        ],
+        temperature: 0.7,
+        max_tokens: 500,
+        stream: false
+      };
     }
   }
 
