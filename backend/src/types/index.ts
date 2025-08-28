@@ -58,3 +58,10 @@ export interface USAJobsSearchResult {
   };
   totalCount: number;
 }
+
+export interface CerebrasResponse {
+  skils: string[];
+  jobMatches: string[];
+  recommendations: string[];
+  summary: string;
+}
