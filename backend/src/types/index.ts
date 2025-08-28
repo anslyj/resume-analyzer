@@ -7,3 +7,12 @@ export interface Resume {
   experience?: number;
 
 }
+
+export interface JobDescription {
+  id?: string;
+  content: string;
+  title: string;
+  company: string;
+  requirements?: string[];
+}
+
