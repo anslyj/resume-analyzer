@@ -29,7 +29,40 @@ export class AnalysisEngine {
       throw new Error(`Resume analysis failed: ${errorMessage}`);
     }
   }
+  static async analyzeJobOnly(jobDescription: JobDescription): Promise<AnalysisResult> {
+    try {
+      const requirements = this.extractRequirements(jobDescription.content);
+      const aiResult = await CerebrasService.analyzeJobOnly(jobDescription.content, requirements);
+      
+      const analysisResult: AnalysisResult = {
+        id: this.generateId(),
+        type: 'job-only',
+        jobDescription: { ...jobDescription, requirements },
+        result: {
+          ...aiResult,
+          requirements: requirements
+        },
+        createdAt: new Date(),
+      };
 
+      return analysisResult;
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+      throw new Error(`Job description analysis failed: ${errorMessage}`);
+    }
+  }
+
+  private static extractRequirements(text: string): string[] {
+    const sentences = text.split(/[.!?]+/);
+    const requirementSentences = sentences.filter(sentence =>
+      sentence.toLowerCase().includes('experience') ||
+      sentence.toLowerCase().includes('skills') ||
+      sentence.toLowerCase().includes('knowledge') ||
+      sentence.toLowerCase().includes('proficiency')
+    );
+
+    return requirementSentences.slice(0, 5);
+  }
   
   private static extractSkills(text: string): string[] {
     const skillKeywords = [
