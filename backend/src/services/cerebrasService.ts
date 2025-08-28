@@ -59,6 +59,38 @@ export class CerebrasService {
       return this.getDefaultAnalysis();
     }
   }
+  static async analyzeJobOnly(jobContent: string, requirements: string[]): Promise<any> {
+    try {
+      const prompt = `
+        Based on this job description, suggest improvements for a resume:
+        1. Key skills to highlight (array of strings)
+        2. Specific keywords to include (array of strings)
+        3. Experience examples to emphasize (array of strings)
+        4. Resume sections to strengthen (array of strings)
+        5. Overall recommendations (string)
+        
+        Job description: ${jobContent}
+        Requirements: ${requirements.join(', ')}
+        
+        Return only valid JSON.
+      `;
+
+      const requestBody = {
+        model: "gpt-oss-120b-chat",
+        messages: [
+          {
+            role: "system",
+            content: "You are a career coach helping job seekers optimize their resumes. Return valid JSON."
+          },
+          {
+            role: "user",
+            content: prompt
+          }
+        ],
+        temperature: 0.7,
+        max_tokens: 500,
+        stream: false
+      };
 
   
       
