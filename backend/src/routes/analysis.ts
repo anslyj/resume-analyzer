@@ -82,3 +82,48 @@ router.post('/resume-only', async (req, res) => {
     res.status(500).json({ error: errorMessage });
   }
 });
+
+// Analyze job description only
+router.post('/job-only', async (req, res) => {
+  try {
+    const { title, company, content } = req.body;
+    
+    if (!content) {
+      return res.status(400).json({ error: 'Job description content is required' });
+    }
+
+    const jobDescription: JobDescription = {
+      title: title || 'Unknown Position',
+      company: company || 'Unknown Company',
+      content,
+    };
+
+    const result = await AnalysisEngine.analyzeJobOnly(jobDescription);
+    res.json(result);
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+    res.status(500).json({ error: errorMessage });
+  }
+});
+
+// Analyze both
+router.post('/both', async (req, res) => {
+  try {
+    const { resume, jobDescription } = req.body;
+    
+    if (!resume?.content || !jobDescription?.content) {
+      return res.status(400).json({ 
+        error: 'Both resume and job description content are required' 
+      });
+    }
+
+    const result = await AnalysisEngine.analyzeBoth(resume, jobDescription);
+    res.json(result);
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+    res.status(500).json({ error: errorMessage });
+  }
+});
+
+export default router;
+
