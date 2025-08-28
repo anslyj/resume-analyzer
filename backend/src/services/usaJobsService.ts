@@ -126,5 +126,13 @@ export class USAJobsService {
       positionEndDate: position.PositionEndDate
     };
   }
+
+  private static formatLocation(locationDisplay: string): string {
+    if (!locationDisplay) return 'Remote/Unknown';
+
+    return locationDisplay
+    .replace(/\s+/g, ' ')
+    .trim()
+  }
 }
 
