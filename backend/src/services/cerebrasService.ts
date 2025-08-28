@@ -145,6 +145,23 @@ export class CerebrasService {
         max_tokens: 500,
         stream: false
       };
+      const response: AxiosResponse = await axios.post(
+        `${this.BASE_URL}/chat/completions`,
+        requestBody,
+        {
+          headers: {
+            'Authorization': `Bearer ${this.API_KEY}`,
+            'Content-Type': 'application/json',
+            'User-Agent': 'ResumeAnalyzer/1.0'
+          },
+          timeout: 30000
+        }
+      );
+      const aiResponse = response.data.choices[0].message.content;
+      return this.parseAIResponse(aiResponse);
+    } catch (error) {
+      console.error('Cerebras API error:', error);
+      return this.getDefaultAnalysis();
     }
   }
 
