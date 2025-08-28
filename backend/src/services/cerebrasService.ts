@@ -192,4 +192,34 @@ export class CerebrasService {
       summary: 'Resume shows good technical skills but could benefit from more quantifiable achievements.'
     };
   }
+  static async testConnection(): Promise<boolean> {
+    try {
+      const response = await axios.post(
+        `${this.BASE_URL}/chat/completions`,
+        {
+          model: "cerebras-llama-2-7b-chat",
+          messages: [
+            {
+              role: "user",
+              content: "Respond with 'Hello, Cerebras is working!'"
+            }
+          ],
+          max_tokens: 50
+        },
+        {
+          headers: {
+            'Authorization': `Bearer ${this.API_KEY}`,
+            'Content-Type': 'application/json'
+          },
+          timeout: 10000
+        }
+      );
+
+      const aiResponse = response.data.choices[0].message.content;
+      return aiResponse.includes('Cerebras is working');
+    } catch (error) {
+      console.error('Cerebras connection test failed:', error);
+      return false;
+    }
+  }
 }
