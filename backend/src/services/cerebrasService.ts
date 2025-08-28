@@ -108,11 +108,10 @@ export class CerebrasService {
     } catch (error) {
       console.error('Cerebras API error:', error);
       return this.getDefaultAnalysis();
-    }
+    } 
+  }
+
+  static async analyzeBoth(resumeContent: string, jobContent: string, resumeSkills: string[], jobRequirements: string[]): Promise<any> {
     
-
-
-  
-      
   }
 }
