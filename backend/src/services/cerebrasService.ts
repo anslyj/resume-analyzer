@@ -112,6 +112,14 @@ export class CerebrasService {
   }
 
   static async analyzeBoth(resumeContent: string, jobContent: string, resumeSkills: string[], jobRequirements: string[]): Promise<any> {
-    
+
+  }
+  private static getDefaultAnalysis(): any {
+    return {
+      skills: ['JavaScript', 'React', 'Node.js'],
+      jobMatches: ['Software Developer', 'Frontend Engineer', 'Full Stack Developer'],
+      recommendations: ['Add more specific project examples', 'Include metrics and achievements'],
+      summary: 'Resume shows good technical skills but could benefit from more quantifiable achievements.'
+    };
   }
 }
