@@ -49,3 +49,12 @@ export interface USAJobsPosition {
   positionEndDate: string;
 }
 
+export interface USAJobsSearchResult {
+  search: {
+    searchResultCount: number;
+    searchResultCountAll: number;
+    searchResultItems: USAJobsPosition[];
+
+  };
+  totalCount: number;
+}
