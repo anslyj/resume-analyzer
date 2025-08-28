@@ -63,6 +63,54 @@ export class AnalysisEngine {
 
     return requirementSentences.slice(0, 5);
   }
+
+  static async analyzeBoth(resume: Resume, jobDescription: JobDescription): Promise<AnalysisResult> {
+    try {
+      const resumeSkills = this.extractSkills(resume.content);
+      const jobRequirements = this.extractRequirements(jobDescription.content);
+      
+      const aiResult = await CerebrasService.analyzeBoth(
+        resume.content, 
+        jobDescription.content, 
+        resumeSkills, 
+        jobRequirements
+      );
+      
+      const matchScore = this.calculateMatchScore(resumeSkills, jobRequirements);
+      
+      const analysisResult: AnalysisResult = {
+        id: this.generateId(),
+        type: 'both',
+        resume: { ...resume, skills: resumeSkills },
+        jobDescription: { ...jobDescription, requirements: jobRequirements },
+        result: {
+          ...aiResult,
+          matchScore: matchScore,
+          resumeSkills: resumeSkills,
+          jobRequirements: jobRequirements
+        },
+        createdAt: new Date(),
+      };
+
+      return analysisResult;
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+      throw new Error(`Combined analysis failed: ${errorMessage}`);
+    }
+  }
+
+  private static calculateMatchScore(resumeSkills: string[], jobRequirements: string[]): number {
+    if (jobRequirements.length === 0) return 0;
+    
+    const matches = resumeSkills.filter(skill =>
+      jobRequirements.some(req =>
+        req.toLowerCase().includes(skill.toLowerCase()) ||
+        skill.toLowerCase().includes(req.toLowerCase())
+      )
+    );
+
+    return Math.round((matches.length / jobRequirements.length) * 100);
+  }
   
   private static extractSkills(text: string): string[] {
     const skillKeywords = [
