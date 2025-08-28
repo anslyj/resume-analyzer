@@ -31,3 +31,21 @@ export interface User {
   name: string;
 }
 
+export interface USAJobsPosition {
+  id: string;
+  positionTitle: string;
+  organizationName: string;
+  location: string;
+  qualificationSummary: string;
+  positionURI: string;
+  salaryMin: number;
+  salaryMax: number;
+  salaryType: string;
+  requirements: string[];
+  benefits: string[];
+  jobCategory: string[];
+  workSchedule: string;
+  positionStartDate: string;
+  positionEndDate: string;
+}
+
