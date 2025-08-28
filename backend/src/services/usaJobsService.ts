@@ -88,5 +88,43 @@ export class USAJobsService {
       return [];
     }
   }
+  private static formatPositions(positions: any[]): USAJobsPosition[] {
+    return positions.map(position => ({
+      id: position.MatchedObjectId,
+      positionTitle: position.MatchedObjectDescriptor.PositionTitle,
+      organizationName: position.MatchedObjectDescriptor.OrganizationName,
+      location: this.formatLocation(position.MatchedObjectDescriptor.PositionLocationDisplay),
+      qualificationSummary: position.MatchedObjectDescriptor.QualificationSummary,
+      positionURI: position.MatchedObjectDescriptor.PositionURI,
+      salaryMin: position.MatchedObjectDescriptor.PositionRemuneration?.[0]?.MinimumRange || 0,
+      salaryMax: position.MatchedObjectDescriptor.PositionRemuneration?.[0]?.MaximumRange || 0,
+      salaryType: position.MatchedObjectDescriptor.PositionRemuneration?.[0]?.RateIntervalCode || 'Per Year',
+      requirements: this.extractRequirements(position.MatchedObjectDescriptor.QualificationSummary),
+      benefits: position.MatchedObjectDescriptor.Benefits || [],
+      jobCategory: position.MatchedObjectDescriptor.JobCategory || [],
+      workSchedule: position.MatchedObjectDescriptor.WorkSchedule || 'Full-time',
+      positionStartDate: position.MatchedObjectDescriptor.PositionStartDate,
+      positionEndDate: position.MatchedObjectDescriptor.PositionEndDate
+    }));
+  }
+  private static formatPosition(position: any): USAJobsPosition {
+    return {
+      id: position.PositionID,
+      positionTitle: position.PositionTitle,
+      organizationName: position.OrganizationName,
+      location: this.formatLocation(position.PositionLocationDisplay),
+      qualificationSummary: position.QualificationSummary,
+      positionURI: position.PositionURI,
+      salaryMin: position.PositionRemuneration?.[0]?.MinimumRange || 0,
+      salaryMax: position.PositionRemuneration?.[0]?.MaximumRange || 0,
+      salaryType: position.PositionRemuneration?.[0]?.RateIntervalCode || 'Per Year',
+      requirements: this.extractRequirements(position.QualificationSummary),
+      benefits: position.Benefits || [],
+      jobCategory: position.JobCategory || [],
+      workSchedule: position.WorkSchedule || 'Full-time',
+      positionStartDate: position.PositionStartDate,
+      positionEndDate: position.PositionEndDate
+    };
+  }
 }
 
