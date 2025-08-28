@@ -112,8 +112,26 @@ export class CerebrasService {
   }
 
   static async analyzeBoth(resumeContent: string, jobContent: string, resumeSkills: string[], jobRequirements: string[]): Promise<any> {
-
+    try {
+      const prompt = `
+        Compare this resume with the job description and provide analysis:
+        1. Skills that match well (object with strengths: array of strings)
+        2. Skills that are missing (object with gaps: array of strings)
+        3. Specific improvements needed (array of strings)
+        4. Overall match percentage (number)
+        5. Detailed analysis (string)
+        
+        Resume: ${resumeContent}
+        Resume Skills: ${resumeSkills.join(', ')}
+        Job Description: ${jobContent}
+        Job Requirements: ${jobRequirements.join(', ')}
+        
+        Return only valid JSON.
+      `;
+    }
   }
+
+
 
   private static parseAIResponse(response: string | null): any {
     if (!response) return this.getDefaultAnalysis();
@@ -126,7 +144,8 @@ export class CerebrasService {
       }
       return this.getDefaultAnalysis();
     } catch ( error) {
-      
+      console.error('Failed to parse AI response:', error);
+      return this.getDefaultAnalysis();
     }
 
   }
