@@ -114,6 +114,11 @@ export class CerebrasService {
   static async analyzeBoth(resumeContent: string, jobContent: string, resumeSkills: string[], jobRequirements: string[]): Promise<any> {
 
   }
+  
+  private static parseAIResponse(response: string | null): any {
+
+  }
+
   private static getDefaultAnalysis(): any {
     return {
       skills: ['JavaScript', 'React', 'Node.js'],
