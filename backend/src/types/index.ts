@@ -16,3 +16,12 @@ export interface JobDescription {
   requirements?: string[];
 }
 
+export interface AnalysisResult {
+  id: string;
+  type: 'resume-only' | 'job-only' | 'both';
+  resume?: Resume;
+  jobDescription?: JobDescription;
+  result: any;
+  createdAt: Date;
+}
+
