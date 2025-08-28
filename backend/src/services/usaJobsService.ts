@@ -134,5 +134,70 @@ export class USAJobsService {
     .replace(/\s+/g, ' ')
     .trim()
   }
+  private static extractRequirements(qualificationSummary: string): string[] {
+    if (!qualificationSummary) return [];
+
+    const sentences = qualificationSummary.split(/[.!?]+/);
+    const requirementKeywords = [
+      'experience', 'years', 'skills', 'knowledge', 'proficiency',
+      'familiarity', 'expertise', 'background', 'qualifications',
+      'requirements', 'must have', 'should have', 'preferred'
+    ];
+
+    const requirementSentences = sentences.filter(sentence =>
+      requirementKeywords.some(keyword => 
+        sentence.toLowerCase().includes(keyword.toLowerCase())
+      )
+    );
+
+    return requirementSentences.slice(0, 5).map(s => s.trim());
+  }
+
+  // Mock data for development/testing
+  private static getMockPositions(keywords: string[]): USAJobsPosition[] {
+    const mockPositions = [
+      {
+        id: '1',
+        positionTitle: 'Software Developer',
+        organizationName: 'Department of Defense',
+        location: 'Washington, DC',
+        qualificationSummary: 'Looking for experienced developer with React and Node.js skills. Must have 3+ years experience.',
+        positionURI: 'https://www.usajobs.gov/job/123',
+        salaryMin: 80000,
+        salaryMax: 120000,
+        salaryType: 'Per Year',
+        requirements: ['3+ years experience', 'React knowledge', 'Node.js proficiency'],
+        benefits: ['Health Insurance', 'Retirement Plan', 'Paid Time Off'],
+        jobCategory: ['Information Technology'],
+        workSchedule: 'Full-time',
+        positionStartDate: '2024-01-01',
+        positionEndDate: '2024-12-31'
+      },
+      {
+        id: '2',
+        positionTitle: 'Data Scientist',
+        organizationName: 'Department of Energy',
+        location: 'Oak Ridge, TN',
+        qualificationSummary: 'Join our team analyzing energy data. Python and machine learning experience required.',
+        positionURI: 'https://www.usajobs.gov/job/456',
+        salaryMin: 90000,
+        salaryMax: 130000,
+        salaryType: 'Per Year',
+        requirements: ['Python expertise', 'Machine learning experience', 'Data analysis skills'],
+        benefits: ['Health Insurance', 'Retirement Plan', 'Flexible Schedule'],
+        jobCategory: ['Data Science'],
+        workSchedule: 'Full-time',
+        positionStartDate: '2024-01-01',
+        positionEndDate: '2024-12-31'
+      }
+    ];
+
+    return mockPositions.filter(position =>
+      keywords.some(keyword =>
+        position.positionTitle.toLowerCase().includes(keyword.toLowerCase()) ||
+        position.qualificationSummary.toLowerCase().includes(keyword.toLowerCase())
+      )
+    );
+  }
 }
 
