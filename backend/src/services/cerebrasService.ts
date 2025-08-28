@@ -114,8 +114,20 @@ export class CerebrasService {
   static async analyzeBoth(resumeContent: string, jobContent: string, resumeSkills: string[], jobRequirements: string[]): Promise<any> {
 
   }
-  
+
   private static parseAIResponse(response: string | null): any {
+    if (!response) return this.getDefaultAnalysis();
+    try {
+      const jsonMatch = response.match(/\{[\s\S]*\}/);
+      if (jsonMatch) {
+        const parsed = JSON.parse(jsonMatch[0]);
+        console.log('Successfully parsed AI respose:', parsed);
+        return parsed;
+      }
+      return this.getDefaultAnalysis();
+    } catch ( error) {
+      
+    }
 
   }
 
