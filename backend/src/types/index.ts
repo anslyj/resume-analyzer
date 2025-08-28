@@ -25,3 +25,9 @@ export interface AnalysisResult {
   createdAt: Date;
 }
 
+export interface User {
+  id: string;
+  email: string;
+  name: string;
+}
+
