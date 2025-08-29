@@ -2,7 +2,13 @@ import axios from "axios";
 import { USAJobsPosition } from "../types";
 
 export class USAJobsService {
-  private static readonly API_KEY = process.env.USAJOBS_API_KEY;
+  
+  private static get API_KEY() {
+    const v = (process.env.USAJOBS_API_KEY || '').trim();
+    if (!v) console.warn('USAJOBS_API_KEY is missing');
+    return v;
+  }
+
   private static readonly HOST = process.env.USAJOBS_HOST || 'data.usajobs.gov';
   private static readonly BASE_URL = 'https://data.usajobs.gov/api';
 
