@@ -1,7 +1,14 @@
 import axios, { AxiosResponse } from 'axios';
 
+
+
 export class CerebrasService {
-  private static readonly API_KEY = process.env.CEREBRAS_API_KEY;
+  
+  private static get API_KEY(): string {
+    const key = (process.env.CEREBRAS_API_KEY || '').trim();
+    if (!key) throw new Error('CEREBRAS_API_KEY not set on the server');
+    return key;
+  }
   private static readonly BASE_URL = 'https://api.cerebras.ai/v1';
 
   static async analyzeResumeOnly(resumeContent: string, skills: string[]): Promise<any> {
@@ -21,7 +28,7 @@ export class CerebrasService {
       `;
 
       const requestBody = {
-        model: "cerebras-llama-2-7b-chat",
+        model: "llama-4-scout-17b-16e-instruct",
         messages: [
           {
             role: "system",
@@ -76,7 +83,7 @@ export class CerebrasService {
       `;
 
       const requestBody = {
-        model: "gpt-oss-120b-chat",
+        model: "llama-4-scout-17b-16e-instruct",
         messages: [
           {
             role: "system",
@@ -130,7 +137,7 @@ export class CerebrasService {
       `;
 
       const requestBody = {
-        model: "gpt-oss-120b-chat",
+        model: "llama-4-scout-17b-16e-instruct",
         messages: [
           {
             role: "system",
@@ -197,7 +204,7 @@ export class CerebrasService {
       const response = await axios.post(
         `${this.BASE_URL}/chat/completions`,
         {
-          model: "cerebras-llama-2-7b-chat",
+          model: "llama-4-scout-17b-16e-instruct",
           messages: [
             {
               role: "user",
