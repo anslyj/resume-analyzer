@@ -3,11 +3,11 @@ import { AdzunaJob, AdzunaSearchResult } from "../types";
 
 export class AdzunaService {
   private static readonly BASE_URL = 'https://api.adzuna.com/v1/api';
-  private static readonly COUNTRY = 'gb'; // Change to 'us' for US jobs
+  private static readonly COUNTRY = 'us'; // Change to 'us' for US jobs
   private static readonly APP_ID = process.env.ADZUNA_APP_ID || '';
   private static readonly APP_KEY = process.env.ADZUNA_APP_KEY || '';
 
-  static async searchJobs(keywords: string[], location: string = 'United Kingdom'): Promise<AdzunaJob[]> {
+  static async searchJobs(keywords: string[], location: string = 'United States'): Promise<AdzunaJob[]> {
     try {
       const searchParams = new URLSearchParams({
         app_id: this.APP_ID,
@@ -80,7 +80,7 @@ export class AdzunaService {
         id: '1',
         title: 'Software Developer',
         company: 'Tech Corp',
-        location: 'London, UK',
+        location: 'Atlanta, US',
         description: 'Looking for experienced developer with React and Node.js skills.',
         salary_min: 40000,
         salary_max: 60000,

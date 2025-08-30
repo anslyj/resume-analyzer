@@ -21,13 +21,13 @@ app.get('/api/health', (req, res) => {
   res.json({ 
     status: 'OK', 
     message: 'Resume Analyzer Server is running',
-    apis: ['Cerebras AI', 'USAJobs'],
+    apis: ['Cerebras AI', 'Adzuna Jobs'],
     timestamp: new Date().toISOString()
   });
 });
 
 app.listen(PORT, () => {
   console.log(`🚀 Resume Analyzer Server running on port ${PORT}`);
-  console.log(`📊 Using USAJobs API for government job data`);
+  console.log(`📊 Using Adzuna API for government job data`);
   console.log(`🤖 Using Cerebras AI for analysis`);
 });
