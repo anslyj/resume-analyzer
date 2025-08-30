@@ -32,29 +32,29 @@ router.get('/test-cerebras', async(req,res) => {
   }
 });
 
-// Test USAJobs connection
-router.get('/test-usajobs', async (req, res) => {
+
+router.get('/test-adzuna', async (req, res) => {
   try {
     const categories = await AdzunaService.getJobCategories();
     
     if (categories.length > 0) {
       res.json({ 
         status: 'success', 
-        message: 'USAJobs API is working correctly!',
-        jobCategories: categories.slice(0, 10), // Show first 10 categories
+        message: 'Adzuna API is working correctly!',
+        jobCategories: categories.slice(0, 10),
         timestamp: new Date().toISOString()
       });
     } else {
       res.status(500).json({ 
         status: 'error', 
-        message: 'USAJobs API test failed',
+        message: 'Adzuna API test failed',
         timestamp: new Date().toISOString()
       });
     }
   } catch (error) {
     res.status(500).json({ 
       status: 'error', 
-      message: 'USAJobs API test failed',
+      message: 'Adzuna API test failed',
       timestamp: new Date().toISOString()
     });
   }
