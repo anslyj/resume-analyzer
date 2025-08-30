@@ -1,7 +1,7 @@
 import express from 'express';
 import { AnalysisEngine } from '../services/analysisEngine';
 import { CerebrasService } from '../services/cerebrasService';
-import { USAJobsService } from '../services/usaJobsService';
+import { AdzunaService } from '../services/adzunaService';
 import { Resume, JobDescription } from '../types';
 
 const router = express.Router();
@@ -35,7 +35,7 @@ router.get('/test-cerebras', async(req,res) => {
 // Test USAJobs connection
 router.get('/test-usajobs', async (req, res) => {
   try {
-    const categories = await USAJobsService.getJobCategories();
+    const categories = await AdzunaService.getJobCategories();
     
     if (categories.length > 0) {
       res.json({ 

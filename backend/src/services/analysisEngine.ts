@@ -1,5 +1,5 @@
 import { CerebrasService } from './cerebrasService';
-import { USAJobsService } from './usaJobsService';
+import { AdzunaService } from './adzunaService';
 import { Resume, JobDescription, AnalysisResult } from '../types';
 
 export class AnalysisEngine {
@@ -8,7 +8,7 @@ export class AnalysisEngine {
       const skills = this.extractSkills(resume.content);
       
       const aiResult = await CerebrasService.analyzeResumeOnly(resume.content, skills);
-      const jobMatches = await USAJobsService.searchJobs(skills, 'United States');
+      const jobMatches = await AdzunaService.searchJobs(skills, 'United States');
       
       const analysisResult: AnalysisResult = {
         id: this.generateId(),
