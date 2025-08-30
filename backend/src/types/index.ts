@@ -31,33 +31,30 @@ export interface User {
   name: string;
 }
 
-export interface USAJobsPosition {
+export interface AdzunaJob {
   id: string;
-  positionTitle: string;
-  organizationName: string;
+  title: string;
+  company: string;
   location: string;
-  qualificationSummary: string;
-  positionURI: string;
-  salaryMin: number;
-  salaryMax: number;
-  salaryType: string;
-  requirements: string[];
-  benefits: string[];
-  jobCategory: string[];
-  workSchedule: string;
-  positionStartDate: string;
-  positionEndDate: string;
+  description: string;
+  salary_min?: number;
+  salary_max?: number;
+  salary_currency?: string;
+  category: string;
+  url: string;
+  created: string;
+  contract_time?: string;
+  contract_type?: string;
 }
 
-export interface USAJobsSearchResult {
-  search: {
-    searchResultCount: number;
-    searchResultCountAll: number;
-    searchResultItems: USAJobsPosition[];
-
-  };
-  totalCount: number;
+export interface AdzunaSearchResult {
+  count: number;
+  results: AdzunaJob[];
+  mean: number;
+  salary_min: number;
+  salary_max: number;
 }
+
 
 export interface CerebrasResponse {
   skils: string[];
