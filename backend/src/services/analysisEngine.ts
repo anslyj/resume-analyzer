@@ -6,9 +6,8 @@ export class AnalysisEngine {
   static async analyzeResumeOnly(resume: Resume): Promise<AnalysisResult> {
     try {
       const skills = this.extractSkills(resume.content);
-      
       const aiResult = await CerebrasService.analyzeResumeOnly(resume.content, skills);
-      const jobMatches = await AdzunaService.searchJobs(skills, 'United States');
+      const jobMatches = await AdzunaService.searchJobs(skills, 'United States'); 
       
       const analysisResult: AnalysisResult = {
         id: this.generateId(),
@@ -16,7 +15,7 @@ export class AnalysisEngine {
         resume: { ...resume, skills },
         result: {
           ...aiResult,
-          jobMatches: jobMatches.slice(0, 5), // Top 5 government job matches
+          jobMatches: jobMatches.slice(0, 5), 
           skills: skills,
           totalJobsFound: jobMatches.length
         },
