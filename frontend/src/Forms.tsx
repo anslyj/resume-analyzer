@@ -45,3 +45,59 @@ export const ResumeForm: React.FC<ResumeFormProps> = ({ onSubmit }) => {
   );
 };
 
+interface JobFormProps {
+  onSubmit: (data: any) => void;
+}
+
+export const JobForm: React.FC<JobFormProps> = ({ onSubmit }) => {
+  const [title, setTitle] = useState('');
+  const [company, setCompany] = useState('');
+  const [content, setContent] = useState('');
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    onSubmit({ title, company, content });
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="analysis-form">
+      <h2> Job Description Analysis </h2>
+      
+      <div className="form-group">
+        <label>Job Title</label>
+        <input 
+          type="text" 
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          placeholder="Software Engineer"
+        />
+      </div>
+      
+      <div className="form-group">
+        <label>Company</label>
+        <input 
+          type="text" 
+          value={company}
+          onChange={(e) => setCompany(e.target.value)}
+          placeholder="Tech Corp"
+        />
+      </div>
+      
+      <div className="form-group">
+        <label>Job Description *</label>
+        <textarea 
+          value={content}
+          onChange={(e) => setContent(e.target.value)}
+          placeholder="Paste the job description here..."
+          rows={15}
+          required
+        />
+      </div>
+      
+      <button type="submit" disabled={!content.trim()}>
+        Analyze Job
+      </button>
+    </form>
+  );
+};
+
