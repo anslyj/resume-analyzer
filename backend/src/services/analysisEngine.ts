@@ -44,39 +44,26 @@ export class AnalysisEngine {
     return requirementSentences.slice(0, 5);
   }
 
-  static async analyzeBoth(resume: Resume, jobDescription: JobDescription): Promise<AnalysisResult> {
-    try {
-      const resumeSkills = this.extractSkills(resume.content);
-      const jobRequirements = this.extractRequirements(jobDescription.content);
-      
-      const aiResult = await CerebrasService.analyzeBoth(
-        resume.content, 
-        jobDescription.content, 
-        resumeSkills, 
-        jobRequirements
-      );
-      
-      const matchScore = this.calculateMatchScore(resumeSkills, jobRequirements);
-      
-      const analysisResult: AnalysisResult = {
-        id: this.generateId(),
-        type: 'both',
-        resume: { ...resume, skills: resumeSkills },
-        jobDescription: { ...jobDescription, requirements: jobRequirements },
-        result: {
-          ...aiResult,
-          matchScore: matchScore,
-          resumeSkills: resumeSkills,
-          jobRequirements: jobRequirements
-        },
-        createdAt: new Date(),
-      };
-
-      return analysisResult;
-    } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
-      throw new Error(`Combined analysis failed: ${errorMessage}`);
-    }
+  static async analyzeBoth(resume: Resume, jobDescription: JobDescription) {
+    const resumeSkills = this.extractSkills(resume.content);
+    const jobRequirements = this.extractRequirements(jobDescription.content);
+    
+    const aiResult = await CerebrasService.analyzeBoth(
+      resume.content, 
+      jobDescription.content, 
+      resumeSkills, 
+      jobRequirements
+    );
+    
+    return {
+      type: 'both' as const,
+      summary: aiResult.summary,
+      strengths: aiResult.strengths,
+      improvements: aiResult.improvements,
+      matchScore: aiResult.matchScore,
+      skillAssessments: aiResult.skillAssessments,
+      actionableRecommendations: aiResult.actionableRecommendations
+    };
   }
 
   private static calculateMatchScore(resumeSkills: string[], jobRequirements: string[]): number {
