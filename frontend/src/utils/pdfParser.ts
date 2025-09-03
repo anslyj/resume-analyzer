@@ -1,10 +1,13 @@
-import * as pdfjsLib from 'pdfjs-dist';
-
-// Set the worker source
-pdfjsLib.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`;
-
+// Alternative approach: Use PDF.js with proper worker setup
 export const extractTextFromPDF = async (file: File): Promise<string> => {
   try {
+    // Dynamic import to avoid build issues
+    const pdfjsLib = await import('pdfjs-dist');
+    
+    // Set worker source to CDN
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 
+      `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`;
+    
     const arrayBuffer = await file.arrayBuffer();
     const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
     
@@ -25,6 +28,7 @@ export const extractTextFromPDF = async (file: File): Promise<string> => {
     return fullText.trim();
   } catch (error) {
     console.error('Error extracting text from PDF:', error);
+    console.error('Error details:', error);
     throw new Error('Failed to extract text from PDF. Please try copying and pasting the text instead.');
   }
 };
