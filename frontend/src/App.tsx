@@ -1,11 +1,26 @@
 import React, { useState } from 'react';
 import './App.css';
+import { ResumeForm, JobForm, BothForm } from './components/Forms';
 
 type AnalysisType = 'resume-only' | 'job-only' | 'both' | null;
 
 function App() {
   const [analysisType, setAnalysisType] = useState<AnalysisType>(null);
   const [results, setResults] = useState(null);
+
+  const handleResumeSubmit = async (resumeData: any) => {
+    try {
+      const response = await fetch('http://localhost:5000/api/analysis/resume-only', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(resumeData)
+      });
+      const result = await response.json();
+      setResults(result);
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
 
   return (
     <div className="App">
@@ -48,7 +63,8 @@ function App() {
         
         {analysisType && !results && (
           <div className="input-section">
-            {/* add later */}
+            {analysisType === 'resume-only' && (<ResumeForm onSubmit={handleResumeSubmit} />)}
+            
             <button onClick={() => setAnalysisType(null)}>← Back</button>
           </div>
         )}
