@@ -452,3 +452,67 @@
     text-align: center;
   }
 }
+
+/* Upload method selector */
+.upload-method-selector {
+  display: flex;
+  gap: 10px;
+  margin-top: 5px;
+}
+
+.method-btn {
+  flex: 1;
+  padding: 12px 20px;
+  border: 2px solid #e1e8ed;
+  border-radius: 8px;
+  background: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.method-btn:hover {
+  border-color: #3498db;
+}
+
+.method-btn.active {
+  background: #3498db;
+  color: white;
+  border-color: #3498db;
+}
+
+/* File input styling */
+.file-input {
+  padding: 12px;
+  border: 2px dashed #e1e8ed;
+  border-radius: 8px;
+  background: #f8f9fa;
+  cursor: pointer;
+  transition: border-color 0.3s ease;
+}
+
+.file-input:hover {
+  border-color: #3498db;
+}
+
+/* Status indicators */
+.processing-indicator {
+  margin-top: 10px;
+  padding: 10px;
+  background: #e3f2fd;
+  border: 1px solid #2196f3;
+  border-radius: 6px;
+  color: #1976d2;
+  font-size: 14px;
+}
+
+.error-message {
+  margin-top: 10px;
+  padding: 10px;
+  background: #ffebee;
+  border: 1px solid #f44336;
+  border-radius: 6px;
+  color: #c62828;
+  font-size: 14px;
+}
