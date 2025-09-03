@@ -3,31 +3,22 @@ import { AdzunaService } from './adzunaService';
 import { Resume, JobDescription, AnalysisResult } from '../types';
 
 export class AnalysisEngine {
-  static async analyzeResumeOnly(resume: Resume): Promise<AnalysisResult> {
-    try {
-      const skills = this.extractSkills(resume.content);
-      const aiResult = await CerebrasService.analyzeResumeOnly(resume.content, skills);
-      const jobMatches = await AdzunaService.searchJobs(skills, 'United States'); 
-      
-      const analysisResult: AnalysisResult = {
-        id: this.generateId(),
-        type: 'resume-only',
-        resume: { ...resume, skills },
-        result: {
-          ...aiResult,
-          jobMatches: jobMatches.slice(0, 5), 
-          skills: skills,
-          totalJobsFound: jobMatches.length
-        },
-        createdAt: new Date(),
-      };
-
-      return analysisResult;
-    } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
-      throw new Error(`Resume analysis failed: ${errorMessage}`);
-    }
+  static async analyzeResumeOnly(resume: Resume) {
+    const skills = this.extractSkills(resume.content);
+    const aiResult = await CerebrasService.analyzeResumeOnly(resume.content, skills);
+    const adzunaJobs = await AdzunaService.searchJobs(skills, 'United States');
+    
+    return {
+      type: 'resume-only' as const,
+      summary: aiResult.summary,
+      strengths: aiResult.strengths,
+      improvements: aiResult.improvements,
+      skillAssessments: aiResult.skillAssessments,
+      jobRecommendations: AdzunaService.transformJobRecommendations(adzunaJobs, skills),
+      actionableRecommendations: aiResult.actionableRecommendations
+    };
   }
+  
   static async analyzeJobOnly(jobDescription: JobDescription): Promise<AnalysisResult> {
     try {
       const requirements = this.extractRequirements(jobDescription.content);
