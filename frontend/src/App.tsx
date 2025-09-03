@@ -181,24 +181,6 @@ const mockResults = {
             </div>
           </div>
         )}
-        {!analysisType && !results && (
-          <div style={{ textAlign: 'center', marginBottom: '20px' }}>
-            <button 
-              onClick={() => setResults(mockResults)}
-              style={{ 
-                padding: '10px 20px', 
-                background: '#e74c3c', 
-                color: 'white', 
-                border: 'none', 
-                borderRadius: '6px',
-                cursor: 'pointer'
-              }}
-            >
-              🧪 Test Results Component
-            </button>
-          </div>
-        )}
-        
         {analysisType && !results && (
           <div className="input-section">
             {analysisType === 'resume-only' && (<ResumeForm onSubmit={handleResumeSubmit} />)}
