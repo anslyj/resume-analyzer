@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import analysisRoutes from './routes/analysis';
+import pdfRoutes from './routes/pdf';
 
 dotenv.config();
 
@@ -15,6 +16,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // Routes
 app.use('/api/analysis', analysisRoutes);
+app.use('/api/pdf', pdfRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {
