@@ -101,3 +101,94 @@ export const JobForm: React.FC<JobFormProps> = ({ onSubmit }) => {
   );
 };
 
+interface BothFormProps {
+  onSubmit: (data: any) => void;
+}
+
+export const BothForm: React.FC<BothFormProps> = ({ onSubmit }) => {
+  const [resumeContent, setResumeContent] = useState('');
+  const [resumeFileName, setResumeFileName] = useState('');
+  const [jobTitle, setJobTitle] = useState('');
+  const [jobCompany, setJobCompany] = useState('');
+  const [jobContent, setJobContent] = useState('');
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    onSubmit({
+      resume: {
+        content: resumeContent,
+        fileName: resumeFileName || 'resume.txt'
+      },
+      jobDescription: {
+        title: jobTitle,
+        company: jobCompany,
+        content: jobContent
+      }
+    });
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="analysis-form">
+      <h2> Compare Resume vs Job </h2>
+      
+      <div className="form-section">
+        <h3>Resume</h3>
+        <div className="form-group">
+          <label>File Name (optional)</label>
+          <input 
+            type="text" 
+            value={resumeFileName}
+            onChange={(e) => setResumeFileName(e.target.value)}
+            placeholder="my-resume.pdf"
+          />
+        </div>
+        <div className="form-group">
+          <label>Resume Content *</label>
+          <textarea 
+            value={resumeContent}
+            onChange={(e) => setResumeContent(e.target.value)}
+            placeholder="Paste your resume text here..."
+            rows={8}
+            required
+          />
+        </div>
+      </div>
+      
+      <div className="form-section">
+        <h3>Job Description</h3>
+        <div className="form-group">
+          <label>Job Title</label>
+          <input 
+            type="text" 
+            value={jobTitle}
+            onChange={(e) => setJobTitle(e.target.value)}
+            placeholder="Software Engineer"
+          />
+        </div>
+        <div className="form-group">
+          <label>Company</label>
+          <input 
+            type="text" 
+            value={jobCompany}
+            onChange={(e) => setJobCompany(e.target.value)}
+            placeholder="Tech Corp"
+          />
+        </div>
+        <div className="form-group">
+          <label>Job Description *</label>
+          <textarea 
+            value={jobContent}
+            onChange={(e) => setJobContent(e.target.value)}
+            placeholder="Paste the job description here..."
+            rows={8}
+            required
+          />
+        </div>
+      </div>
+      
+      <button type="submit" disabled={!resumeContent.trim() || !jobContent.trim()}>
+        Compare Both
+      </button>
+    </form>
+  );
+};
