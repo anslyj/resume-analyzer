@@ -15,7 +15,7 @@ export const ResumeForm: React.FC<ResumeFormProps> = ({ onSubmit }) => {
 
   return (
     <form onSubmit={handleSubmit} className="analysis-form">
-      <h2>📄 Resume Analysis</h2>
+      <h2> Resume Analysis</h2>
       
       <div className="form-group">
         <label>File Name (optional)</label>
