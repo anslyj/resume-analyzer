@@ -1,15 +1,19 @@
-// Alternative approach: Use PDF.js with proper worker setup
+// PDF.js with Create React App compatible setup
 export const extractTextFromPDF = async (file: File): Promise<string> => {
   try {
     // Dynamic import to avoid build issues
     const pdfjsLib = await import('pdfjs-dist');
     
-    // Set worker source to CDN
-    pdfjsLib.GlobalWorkerOptions.workerSrc = 
-      `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`;
+    // Disable worker for Create React App compatibility
+    pdfjsLib.GlobalWorkerOptions.workerSrc = '';
     
     const arrayBuffer = await file.arrayBuffer();
-    const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+    const pdf = await pdfjsLib.getDocument({ 
+      data: arrayBuffer,
+      useWorkerFetch: false,
+      isEvalSupported: false,
+      useSystemFonts: true
+    }).promise;
     
     let fullText = '';
     
