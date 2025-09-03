@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import './App.css';
 import { ResumeForm, JobForm, BothForm } from './components/Forms';
+import { Results } from './components/Results';
+
 
 type AnalysisType = 'resume-only' | 'job-only' | 'both' | null;
 
 function App() {
   const [analysisType, setAnalysisType] = useState<AnalysisType>(null);
-  const [results, setResults] = useState(null);
+  const [results, setResults] = useState<any>(null);
 
   const handleResumeSubmit = async (resumeData: any) => {
     try {
@@ -97,12 +99,10 @@ function App() {
         )}
         
         {results && (
-          <div className="results-section">
-            {/* add later */}
-            <button onClick={() => { setResults(null); setAnalysisType(null); }}>
-              Start Over
-            </button>
-          </div>
+          <Results 
+            results={results} 
+            onStartOver={() => { setResults(null); setAnalysisType(null); }}
+          />
         )}
       </main>
     </div>
