@@ -18,29 +18,19 @@ export class AnalysisEngine {
       actionableRecommendations: aiResult.actionableRecommendations
     };
   }
-  
-  static async analyzeJobOnly(jobDescription: JobDescription): Promise<AnalysisResult> {
-    try {
-      const requirements = this.extractRequirements(jobDescription.content);
-      const aiResult = await CerebrasService.analyzeJobOnly(jobDescription.content, requirements);
-      
-      const analysisResult: AnalysisResult = {
-        id: this.generateId(),
-        type: 'job-only',
-        jobDescription: { ...jobDescription, requirements },
-        result: {
-          ...aiResult,
-          requirements: requirements
-        },
-        createdAt: new Date(),
-      };
 
-      return analysisResult;
-    } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
-      throw new Error(`Job description analysis failed: ${errorMessage}`);
-    }
-  }
+  static async analyzeJobOnly(jobDescription: JobDescription) {
+  const requirements = this.extractRequirements(jobDescription.content);
+  const aiResult = await CerebrasService.analyzeJobOnly(jobDescription.content, requirements);
+  
+  return {
+    type: 'job-only' as const,
+    summary: aiResult.summary,
+    strengths: aiResult.strengths,
+    improvements: aiResult.improvements,
+    actionableRecommendations: aiResult.actionableRecommendations
+  };
+}
 
   private static extractRequirements(text: string): string[] {
     const sentences = text.split(/[.!?]+/);
