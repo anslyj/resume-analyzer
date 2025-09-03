@@ -21,6 +21,19 @@ function App() {
       console.error('Error:', error);
     }
   };
+  const handleJobSubmit = async (jobData: any) => {
+    try {
+      const response = await fetch('http://localhost:5000/api/analysis/job-only', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(jobData)
+      });
+      const result = await response.json();
+      setResults(result);
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
 
   return (
     <div className="App">
@@ -64,7 +77,7 @@ function App() {
         {analysisType && !results && (
           <div className="input-section">
             {analysisType === 'resume-only' && (<ResumeForm onSubmit={handleResumeSubmit} />)}
-            
+            {analysisType === 'job-only' && (<JobForm onSubmit={handleJobSubmit} />)}
             <button onClick={() => setAnalysisType(null)}>← Back</button>
           </div>
         )}
