@@ -13,19 +13,33 @@ export class CerebrasService {
 
   static async analyzeResumeOnly(resumeContent: string, skills: string[]): Promise<any> {
     try {
-      const prompt = `
-        Analyze this resume and provide a JSON response with:
-        1. Key skills and keywords that stand out (array of strings)
-        2. Top 5 job titles that would be a good match (array of strings)
-        3. Industry recommendations (array of strings)
-        4. Skill level assessment (object with levels: beginner, intermediate, advanced)
-        5. Overall summary (string)
-        
-        Resume content: ${resumeContent}
-        Extracted skills: ${skills.join(', ')}
-        
-        Return only valid JSON.
-      `;
+        const prompt = `
+        Analyze this resume and return a JSON response with this EXACT structure:
+          {
+          "summary": "2-3 sentence overview of the resume",
+          "strengths": ["strength1", "strength2", "strength3", "strength4", "strength5"],
+          "improvements": ["improvement1", "improvement2", "improvement3", "improvement4"],
+          "skillAssessments": [
+            {
+              "skill": "JavaScript",
+              "level": "Advanced",
+              "score": 85,
+              "feedback": "Strong foundation, consider learning frameworks"
+            }
+          ],
+          "actionableRecommendations": [
+            "Add quantifiable achievements",
+            "Include portfolio links",
+            "Get relevant certifications"
+          ]
+        }
+
+        Resume: ${resumeContent}
+        Skills found: ${skills.join(", ")}
+
+        Return ONLY the JSON object, no other text.
+        `;
+
 
       const requestBody = {
         model: "llama-4-scout-17b-16e-instruct",
@@ -69,17 +83,20 @@ export class CerebrasService {
   static async analyzeJobOnly(jobContent: string, requirements: string[]): Promise<any> {
     try {
       const prompt = `
-        Based on this job description, suggest improvements for a resume:
-        1. Key skills to highlight (array of strings)
-        2. Specific keywords to include (array of strings)
-        3. Experience examples to emphasize (array of strings)
-        4. Resume sections to strengthen (array of strings)
-        5. Overall recommendations (string)
-        
-        Job description: ${jobContent}
-        Requirements: ${requirements.join(', ')}
-        
-        Return only valid JSON.
+      Analyze this job description and return resume optimization advice in this EXACT JSON structure:
+      {
+        "summary": "Analysis of what this job requires",
+        "strengths": ["skills to highlight", "experience to emphasize"],
+        "improvements": ["what to add to resume", "what to strengthen"],
+        "actionableRecommendations": [
+          "Specific resume improvements for this job"
+        ]
+      }
+
+      Job Description: ${jobContent}
+      Requirements: ${requirements.join(', ')}
+
+      Return ONLY the JSON object.
       `;
 
       const requestBody = {
@@ -121,19 +138,29 @@ export class CerebrasService {
   static async analyzeBoth(resumeContent: string, jobContent: string, resumeSkills: string[], jobRequirements: string[]): Promise<any> {
     try {
       const prompt = `
-        Compare this resume with the job description and provide analysis:
-        1. Skills that match well (object with strengths: array of strings)
-        2. Skills that are missing (object with gaps: array of strings)
-        3. Specific improvements needed (array of strings)
-        4. Overall match percentage (number)
-        5. Detailed analysis (string)
-        
-        Resume: ${resumeContent}
-        Resume Skills: ${resumeSkills.join(', ')}
-        Job Description: ${jobContent}
-        Job Requirements: ${jobRequirements.join(', ')}
-        
-        Return only valid JSON.
+      Compare this resume against the job description and return this EXACT JSON structure:
+      {
+        "summary": "Overall match assessment",
+        "strengths": ["matching skills", "relevant experience"],
+        "improvements": ["missing skills", "gaps to address"],
+        "matchScore": 75,
+        "skillAssessments": [
+          {
+            "skill": "React",
+            "level": "Advanced",
+            "score": 90,
+            "feedback": "Strong match for job requirements"
+          }
+        ],
+        "actionableRecommendations": [
+          "Specific steps to improve match"
+        ]
+      }
+
+      Resume: ${resumeContent}
+      Job Description: ${jobContent}
+
+      Return ONLY the JSON object.
       `;
 
       const requestBody = {
