@@ -6,6 +6,12 @@ import pdfRoutes from './routes/pdf';
 
 dotenv.config();
 
+// Debug environment variables
+console.log('=== Environment Variables Debug ===');
+console.log('ADZUNA_APP_ID:', process.env.ADZUNA_APP_ID ? 'SET' : 'NOT SET');
+console.log('ADZUNA_APP_KEY:', process.env.ADZUNA_APP_KEY ? 'SET' : 'NOT SET');
+console.log('Current working directory:', process.cwd());
+
 const app = express();
 const PORT = process.env.PORT || 5000;
 

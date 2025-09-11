@@ -13,45 +13,81 @@ interface JobRecommendation {
 export class AdzunaService {
   private static readonly BASE_URL = "https://api.adzuna.com/v1/api/jobs";
   private static readonly COUNTRY = "us";
-  private static readonly APP_ID = process.env.ADZUNA_APP_ID || "a6031ed4";
-  private static readonly APP_KEY = process.env.ADZUNA_APP_KEY || "991186631170d76d0a45b2be4d3768a3"; // (avoid trailing whitespace)
 
-  private static assertCreds() {
-    if (!this.APP_ID || !this.APP_KEY) {
+  private static getCredentials() {
+    const APP_ID = process.env.ADZUNA_APP_ID;
+    const APP_KEY = process.env.ADZUNA_APP_KEY;
+    
+    console.log("=== Credential Check ===");
+    console.log("APP_ID exists:", !!APP_ID);
+    console.log("APP_KEY exists:", !!APP_KEY);
+    console.log("APP_ID value:", APP_ID ? `${APP_ID.substring(0, 8)}...` : "undefined");
+    console.log("APP_KEY value:", APP_KEY ? `${APP_KEY.substring(0, 8)}...` : "undefined");
+    
+    if (!APP_ID || !APP_KEY) {
       throw new Error("Missing Adzuna credentials: set ADZUNA_APP_ID and ADZUNA_APP_KEY");
     }
+    
+    return { APP_ID, APP_KEY };
   }
 
   static async searchJobs(keywords: string[], location = "United States"): Promise<AdzunaJob[]> {
     try {
-      this.assertCreds();
+      const { APP_ID, APP_KEY } = this.getCredentials();
+      
+      console.log("=== Adzuna API Call Debug ===");
+      console.log("Keywords:", keywords);
+      console.log("Location:", location);
 
       const url = `${this.BASE_URL}/${this.COUNTRY}/search/1`;
+      console.log("Full URL:", url);
+      
+      const params = {
+        app_id: APP_ID,
+        app_key: APP_KEY,
+        results_per_page: 20,
+        what: keywords.join(" "),
+        where: location,
+        sort_by: "date",
+      };
+      console.log("Request params:", params);
+
       const response = await axios.get(url, {
-        params: {
-          app_id: this.APP_ID,
-          app_key: this.APP_KEY,
-          results_per_page: 20,
-          what: keywords.join(" "),
-          where: location,
-          sort_by: "date",
-        },
+        params,
         timeout: 30000,
       });
 
-      return response.data?.results ? this.formatJobs(response.data.results) : [];
-    } catch (error) {
-      console.error("Adzuna API error:", error);
-      return this.getMockJobs(keywords);
+      console.log("Response status:", response.status);
+      console.log("Response data keys:", Object.keys(response.data || {}));
+      console.log("Results count:", response.data?.results?.length || 0);
+      
+      if (response.data?.results && response.data.results.length > 0) {
+        console.log("First job title:", response.data.results[0]?.title);
+        const formattedJobs = this.formatJobs(response.data.results);
+        console.log("Formatted jobs count:", formattedJobs.length);
+        return formattedJobs;
+      } else {
+        console.log("No results found in API response");
+        return [];
+      }
+    } catch (error: any) {
+      console.error("=== Adzuna API Error ===");
+      console.error("Error type:", error?.constructor?.name);
+      console.error("Error message:", error?.message);
+      if (error?.response) {
+        console.error("Response status:", error.response.status);
+        console.error("Response data:", error.response.data);
+      }
+      return [];
     }
   }
 
   static async getJobCategories(): Promise<string[]> {
     try {
-      this.assertCreds();
+      const { APP_ID, APP_KEY } = this.getCredentials();
       const url = `${this.BASE_URL}/${this.COUNTRY}/categories`;
       const response = await axios.get(url, {
-        params: { app_id: this.APP_ID, app_key: this.APP_KEY },
+        params: { app_id: APP_ID, app_key: APP_KEY },
         timeout: 30000,
       });
 
@@ -126,23 +162,4 @@ export class AdzunaService {
     return reasons.slice(0, 3);
   }
 
-  private static getMockJobs(_keywords: string[]): AdzunaJob[] {
-    return [
-      {
-        id: "1",
-        title: "Software Developer",
-        company: "Tech Corp",           
-        location: "Atlanta, US", 
-        description: "Looking for experienced developer with React and Node.js skills.",
-        salary_min: 80000,
-        salary_max: 120000,
-        salary_currency: "USD",
-        category: "IT Jobs",
-        url: "https://example.com/job1",
-        created: new Date().toISOString(),
-        contract_time: "full_time",
-        contract_type: "permanent",
-      },
-    ];
-  }
 }
