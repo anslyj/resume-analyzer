@@ -19,6 +19,8 @@ export class CerebrasService {
           "summary": "2-3 sentence overview of the resume",
           "strengths": ["strength1", "strength2", "strength3", "strength4", "strength5"],
           "improvements": ["improvement1", "improvement2", "improvement3", "improvement4"],
+          "extractedSkills": ["skill1", "skill2", "skill3", "skill4", "skill5"],
+          "jobSearchKeyword": "keyword1",
           "skillAssessments": [
             {
               "skill": "JavaScript",
