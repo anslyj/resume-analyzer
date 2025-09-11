@@ -31,8 +31,7 @@ export class AdzunaService {
     return { APP_ID, APP_KEY };
   }
 
-  static async searchJobs(keywords: string[], location = "United States"): Promise<AdzunaJob[]> {
-    try {
+  static async searchJobs(keywords: string, location = "United States"): Promise<AdzunaJob[]> {    try {
       const { APP_ID, APP_KEY } = this.getCredentials();
       
       console.log("=== Adzuna API Call Debug ===");
@@ -46,7 +45,7 @@ export class AdzunaService {
         app_id: APP_ID,
         app_key: APP_KEY,
         results_per_page: 20,
-        what: keywords.join(" "),
+        what: keywords,
         where: location,
         sort_by: "date",
       };

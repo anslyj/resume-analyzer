@@ -4,9 +4,8 @@ import { Resume, JobDescription, AnalysisResult } from '../types';
 
 export class AnalysisEngine {
   static async analyzeResumeOnly(resume: Resume) {
-    const skills = this.extractSkills(resume.content);
-    const aiResult = await CerebrasService.analyzeResumeOnly(resume.content, skills);
-    const adzunaJobs = await AdzunaService.searchJobs(skills, 'United States');
+    const aiResult = await CerebrasService.analyzeResumeOnly(resume.content, []);
+    const adzunaJobs = await AdzunaService.searchJobs(aiResult.jobSearchKeyword, 'United States');
     
     return {
       type: 'resume-only' as const,
@@ -14,7 +13,7 @@ export class AnalysisEngine {
       strengths: aiResult.strengths,
       improvements: aiResult.improvements,
       skillAssessments: aiResult.skillAssessments,
-      jobRecommendations: AdzunaService.transformJobRecommendations(adzunaJobs, skills),
+      jobRecommendations: AdzunaService.transformJobRecommendations(adzunaJobs, aiResult.extractedSkills || []),
       actionableRecommendations: aiResult.actionableRecommendations
     };
   }
@@ -45,8 +44,11 @@ export class AnalysisEngine {
   }
 
   static async analyzeBoth(resume: Resume, jobDescription: JobDescription) {
-    const resumeSkills = this.extractSkills(resume.content);
     const jobRequirements = this.extractRequirements(jobDescription.content);
+    
+    // First get skills from resume via Cerebras
+    const resumeAnalysis = await CerebrasService.analyzeResumeOnly(resume.content, []);
+    const resumeSkills = resumeAnalysis.extractedSkills || [];
     
     const aiResult = await CerebrasService.analyzeBoth(
       resume.content, 
@@ -79,20 +81,6 @@ export class AnalysisEngine {
     return Math.round((matches.length / jobRequirements.length) * 100);
   }
   
-  private static extractSkills(text: string): string[] {
-    const skillKeywords = [
-      'JavaScript', 'Python', 'Java', 'React', 'Node.js', 'Angular', 'Vue.js',
-      'SQL', 'MongoDB', 'AWS', 'Docker', 'Git', 'TypeScript', 'HTML', 'CSS',
-      'Machine Learning', 'AI', 'Data Science', 'DevOps', 'Agile', 'Scrum',
-      'Project Management', 'Leadership', 'Communication', 'Analysis'
-    ];
-
-    const foundSkills = skillKeywords.filter(skill =>
-      text.toLowerCase().includes(skill.toLowerCase())
-    );
-
-    return foundSkills.length > 0 ? foundSkills : ['General Software Development'];
-  }
 
 
   private static generateId(): string {

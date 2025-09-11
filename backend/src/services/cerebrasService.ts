@@ -31,7 +31,7 @@ export class CerebrasService {
           ],
           "actionableRecommendations": [
             "Add quantifiable achievements",
-            "Include portfolio links",
+            "Include portfolio links based on major",
             "Get relevant certifications"
           ]
         }
@@ -48,7 +48,7 @@ export class CerebrasService {
         messages: [
           {
             role: "system",
-            content: "You are a professional resume analyst. Provide detailed, actionable insights in valid JSON format."
+            content: "You are a professional resume analyst. Provide detailed, actionable insights in valid JSON format. Keep in mind of major if provided"
           },
           {
             role: "user",
