@@ -3,20 +3,28 @@ import { AdzunaService } from './adzunaService';
 import { Resume, JobDescription, AnalysisResult } from '../types';
 
 export class AnalysisEngine {
-  static async analyzeResumeOnly(resume: Resume) {
-    const aiResult = await CerebrasService.analyzeResumeOnly(resume.content, []);
-    const adzunaJobs = await AdzunaService.searchJobs(aiResult.jobSearchKeyword, 'United States');
-    
-    return {
-      type: 'resume-only' as const,
-      summary: aiResult.summary,
-      strengths: aiResult.strengths,
-      improvements: aiResult.improvements,
-      skillAssessments: aiResult.skillAssessments,
-      jobRecommendations: AdzunaService.transformJobRecommendations(adzunaJobs, aiResult.extractedSkills || []),
-      actionableRecommendations: aiResult.actionableRecommendations
-    };
+  // Update the method signature and implementation (around line 5-19)
+static async analyzeResumeOnly(resume: Resume, roleLevel?: string) {
+  const aiResult = await CerebrasService.analyzeResumeOnly(resume.content, []);
+  
+  // Combine the AI keyword with role level
+  let searchQuery = aiResult.jobSearchKeyword || 'general';
+  if (roleLevel && roleLevel !== 'Any Level') {
+    searchQuery = `${roleLevel} ${searchQuery}`;
   }
+  
+  const adzunaJobs = await AdzunaService.searchJobs(searchQuery, 'United States');
+  
+  return {
+    type: 'resume-only' as const,
+    summary: aiResult.summary,
+    strengths: aiResult.strengths,
+    improvements: aiResult.improvements,
+    skillAssessments: aiResult.skillAssessments,
+    jobRecommendations: AdzunaService.transformJobRecommendations(adzunaJobs, aiResult.extractedSkills || []),
+    actionableRecommendations: aiResult.actionableRecommendations
+  };
+}
 
   static async analyzeJobOnly(jobDescription: JobDescription) {
   const requirements = this.extractRequirements(jobDescription.content);
