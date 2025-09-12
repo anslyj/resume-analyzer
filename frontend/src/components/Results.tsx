@@ -94,7 +94,7 @@ export const Results: React.FC<ResultsProps> = ({ results, onStartOver }) => {
           <div className="strengths-card">
             <h3> Strengths</h3>
             <ul>
-              {results.strengths.map((strength, index) => (
+            {(results.strengths || []).map((strength, index) => (
                 <li key={index}>{strength}</li>
               ))}
             </ul>
@@ -102,7 +102,7 @@ export const Results: React.FC<ResultsProps> = ({ results, onStartOver }) => {
           <div className="improvements-card">
             <h3>🔧 Areas for Improvement</h3>
             <ul>
-              {results.improvements.map((improvement, index) => (
+            {(results.improvements || []).map((improvement, index) => (
                 <li key={index}>{improvement}</li>
               ))}
             </ul>
@@ -115,7 +115,7 @@ export const Results: React.FC<ResultsProps> = ({ results, onStartOver }) => {
         <div className="analysis-section">
           <h3>🛠️ Skill Assessment</h3>
           <div className="skills-grid">
-            {results.skillAssessments.map((skill, index) => (
+          {(results.skillAssessments || []).map((skill, index) => (
               <div key={index} className="skill-card">
                 <div className="skill-header">
                   <h4>{skill.skill}</h4>
@@ -150,7 +150,7 @@ export const Results: React.FC<ResultsProps> = ({ results, onStartOver }) => {
         <div className="analysis-section">
           <h3> Job Recommendations</h3>
           <div className="jobs-grid">
-            {results.jobRecommendations.map((job, index) => (
+          {(results.jobRecommendations || []).map((job, index) => (
               <div key={index} className="job-card">
                 <div className="job-header">
                   <h4>{job.title}</h4>
@@ -166,7 +166,7 @@ export const Results: React.FC<ResultsProps> = ({ results, onStartOver }) => {
                 <div className="job-reasons">
                   <h5>Why this matches:</h5>
                   <ul>
-                    {job.reasons.map((reason, idx) => (
+                  {(job.reasons || []).map((reason, idx) => (
                       <li key={idx}>{reason}</li>
                     ))}
                   </ul>
@@ -181,7 +181,7 @@ export const Results: React.FC<ResultsProps> = ({ results, onStartOver }) => {
       <div className="analysis-section">
         <h3> Actionable Recommendations</h3>
         <div className="recommendations-list">
-          {results.actionableRecommendations.map((recommendation, index) => (
+        {(results.actionableRecommendations || []).map((recommendation, index) => (
             <div key={index} className="recommendation-item">
               <div className="recommendation-number">{index + 1}</div>
               <p>{recommendation}</p>

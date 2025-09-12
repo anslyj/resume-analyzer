@@ -61,9 +61,10 @@ router.get('/test-adzuna', async (req, res) => {
 });
 
 // Analyze resume only
+// Update the route handler (around line 64-83)
 router.post('/resume-only', async (req, res) => {
   try {
-    const { content, fileName } = req.body;
+    const { content, fileName, roleLevel } = req.body; // Add roleLevel here
     
     if (!content) {
       return res.status(400).json({ error: 'Resume content is required' });
@@ -75,7 +76,7 @@ router.post('/resume-only', async (req, res) => {
       uploadDate: new Date(),
     };
 
-    const result = await AnalysisEngine.analyzeResumeOnly(resume);
+    const result = await AnalysisEngine.analyzeResumeOnly(resume, roleLevel); // Pass roleLevel
     res.json(result);
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
