@@ -3,16 +3,16 @@ import './App.css';
 import { ResumeForm, JobForm, BothForm } from './components/Forms';
 import { Results } from './components/Results';
 
-
 type AnalysisType = 'resume-only' | 'job-only' | 'both' | null;
 
 function App() {
   const [analysisType, setAnalysisType] = useState<AnalysisType>(null);
   const [results, setResults] = useState<any>(null);
+  const API = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
   const handleResumeSubmit = async (resumeData: any) => {
     try {
-      const response = await fetch('http://localhost:5000/api/analysis/resume-only', {
+      const response = await fetch(`${API}/api/analysis/resume-only`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(resumeData)
@@ -25,7 +25,7 @@ function App() {
   };
   const handleJobSubmit = async (jobData: any) => {
     try {
-      const response = await fetch('http://localhost:5000/api/analysis/job-only', {
+      const response = await fetch(`${API}/api/analysis/job-only`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(jobData)
@@ -38,7 +38,7 @@ function App() {
   };
   const handleBothSubmit = async (bothData: any) => {
     try {
-      const response = await fetch('http://localhost:5000/api/analysis/both', {
+      const response = await fetch(`${API}/api/analysis/both`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(bothData)
