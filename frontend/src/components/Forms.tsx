@@ -10,6 +10,8 @@ export const ResumeForm: React.FC<ResumeFormProps> = ({ onSubmit }) => {
   const [uploadMethod, setUploadMethod] = useState<'text' | 'file'>('text');
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState('');
+  const [roleLevel, setRoleLevel] = useState('Any Level');
+
 
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -40,7 +42,7 @@ export const ResumeForm: React.FC<ResumeFormProps> = ({ onSubmit }) => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSubmit({ content, fileName: fileName || 'resume.txt' });
+    onSubmit({ content, fileName: fileName || 'resume.txt', roleLevel });
   };
 
   return (
@@ -80,16 +82,17 @@ export const ResumeForm: React.FC<ResumeFormProps> = ({ onSubmit }) => {
           />
           {isProcessing && (
             <div className="processing-indicator">
-              🔄 Processing PDF... Please wait
+               Processing PDF... Please wait
             </div>
           )}
           {error && (
             <div className="error-message">
-              ❌ {error}
+               {error}
             </div>
           )}
         </div>
       )}
+
 
       {uploadMethod === 'text' && (
         <div className="form-group">
@@ -102,6 +105,26 @@ export const ResumeForm: React.FC<ResumeFormProps> = ({ onSubmit }) => {
           />
         </div>
       )}
+
+      <div className="form-group">
+        <label>Job Level Preference</label>
+        <select 
+          value={roleLevel}
+          onChange={(e) => setRoleLevel(e.target.value)}
+          className="role-select"
+        >
+          <option value="Any Level">Any Level</option>
+          <option value="Intern">Intern</option>
+          <option value="Entry Level">Entry Level</option>
+          <option value="Junior">Junior</option>
+          <option value="Mid Level">Mid Level</option>
+          <option value="Senior">Senior</option>
+          <option value="Lead">Lead</option>
+          <option value="Manager">Manager</option>
+          <option value="Director">Director</option>
+        </select>
+      </div>
+
       
       <div className="form-group">
         <label>Resume Content *</label>
